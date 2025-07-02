@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ようこそ</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "MS PGothic", sans-serif;
+    }
+    .welcome-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: url("welcome.png") no-repeat center center;
+      background-size: cover;
+    }
+    .welcome-text {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 36px;
+      color: white;
+      text-shadow: 2px 2px 4px black;
+    }
+    .boardmenu {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .boardmenu a {
+      background-color: #ccffcc;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #006400;
+      font-weight: bold;
+      border: 1px solid #90ee90;
+    }
+    .boardmenu a:hover {
+      background-color: #aaffaa;
+    }
+    .enter-btn {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-container">
+    <div class="welcome-text">ようこそ</div>
+    <div class="boardmenu" id="boardMenu"></div>
+    <button class="enter-btn" onclick="location.href='index.html'">全スレを見る</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    const supabase = supabase.createClient("https://hfaammdbcoxympbtfwql.supabase.co", "YOUR_PUBLIC_KEY");
+
+    async function loadBoards() {
+      const { data, error } = await supabase.from("boards").select("*").order("id");
+      if (error) return;
+
+      const menu = document.getElementById("boardMenu");
+      menu.innerHTML = data.map(b => 
+        `<a href="index.html?board=${b.id}">${b.name}</a>`
+      ).join("");
+    }
+
+    loadBoards();
+  </script>
+</body>
+</html>
