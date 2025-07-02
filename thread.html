@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>スレッド</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topbar">
+    <button onclick="logout()">ログアウト</button>
+  </div>
+  <h1>■ スレッド</h1>
+  <div id="threadContent"></div>
+  <h2>コメント投稿</h2>
+  <input type="text" id="name" placeholder="名前（省略可）">
+  <textarea id="comment" rows="3" placeholder="コメントを入力"></textarea>
+  <button onclick="postComment()">書き込む</button>
+  <h2>コメント一覧</h2>
+  <div id="comments"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    const supabase = supabase.createClient("https://hfaammdbcoxympbtfwql.supabase.co", "YOUR_PUBLIC_KEY");
+    const threadId = new URLSearchParams(location.search).get("id");
+
+    function logout() {
+      localStorage.removeItem("wakakusa_logged_in");
+      location.href = "login.html";
+    }
+
+    async function loadThread() {
+      const { data } = await supabase.from("threads").select("*").eq("id", threadId).single();
+      if (data) {
+        document.getElementById("threadContent").innerHTML = `<strong>${data.content}</strong>（${data.name}）`;
+      }
+    }
+
+    async function postComment() {
+      const name = document.getElementById("name").value || "名無しさん";
+      const content = document.getElementById("comment").value.trim();
+      if (!content) return alert("コメントを入力してください");
+      await supabase.from("comments").insert([{ thread_id: threadId, name, content }]);
+      document.getElementById("comment").value = "";
+      loadComments();
+    }
+
+    async function loadComments() {
+      const { data } = await supabase.from("comments").select("*").eq("thread_id", threadId);
+      const div = document.getElementById("comments");
+      div.innerHTML = data.map((c, i) =>
+        `<div class="res"><span class="name">${c.name}</span>: ${c.content.replace(/>>\d+/g, m => '<a href="#' + m.slice(2) + '">' + m + '</a>')}</div>`
+      ).join("") || "まだコメントがありません";
+    }
+
+    loadThread();
+    loadComments();
+  </script>
+</body>
+</html>
