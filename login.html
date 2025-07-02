@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ログイン</title>
+</head>
+<body>
+  <h1>ログイン</h1>
+  <input type="password" id="password" placeholder="パスワードを入力">
+  <button onclick="login()">ログイン</button>
+  <script>
+    function login() {
+      const pw = document.getElementById("password").value;
+      if (pw === "wakakusa") {
+        localStorage.setItem("wakakusa_logged_in", "true");
+        localStorage.setItem("is_admin", "false");
+        location.href = "welcome.html";
+      } else if (pw === "wakakusanagisa") {
+        localStorage.setItem("wakakusa_logged_in", "true");
+        localStorage.setItem("is_admin", "true");
+        location.href = "welcome.html";
+      } else {
+        alert("パスワードが違います");
+      }
+    }
+  </script>
+</body>
+</html>
