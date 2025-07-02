@@ -1,5 +1,5 @@
-const SUPABASE_URL = "https://hfaammdbcoxympbtfwql.supabase.co";
-const SUPABASE_KEY = "YOUR_PUBLIC_KEY";
+const SUPABASE_URL = "https://ghgnpbunnjzuopcxocqa.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoZ25wYnVubmp6dW9wY3hvY3FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0MzA2MjIsImV4cCI6MjA2NzAwNjYyMn0.dgaTQXunx3__argTQar8qMpX6dQlqC7LZGlcdloz8NY";
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 if (!localStorage.getItem("wakakusa_logged_in")) location.href = "login.html";
